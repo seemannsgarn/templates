@@ -1,4 +1,4 @@
 FROM alpine
 RUN apk update
-RUN echo 'hello'
+RUN echo 'hello world'
 CMD tail -f /dev/null
