@@ -1,9 +1,9 @@
 import os
 import json
 import datetime
-from Flask import Flask
+from flask import Flask
 
-app = FLask(__name__)
+app = Flask(__name__)
 
 BASE_FOLDER = os.path.dirname(os.path.abspath(__file__))
 RESOURCE_DIR = os.path.join(BASE_FOLDER, "resources")
