@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: k8s-application
+    env: prod
+    owner: DarthVader
+spec:
+  replicas: 3
+  selector: 
+    matchLabels: 
+      project: deathStar
+  template:
+    metadata:
+      labels:
+        project: deathStar
+    spec:
+      containers:
+        - name: death-star
+          image: mustafaevsl/k8s-php-test:latest
+          ports:
+            - containerPort: 80

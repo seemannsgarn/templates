@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment-autoscaling
+  labels:
+    app: k8s-application
+    env: prod
+    owner: DarthVader
+spec:
+  replicas: 2
+  selector: 
+    matchLabels: 
+      project: deathStarBlackEdition
+  template:
+    metadata:
+      labels:
+        project: deathStarBlackEdition
+    spec:
+      containers:
+        - name: death-star-black
+          image: mustafaevsl/k8s-php-test:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: autoscaling-death-star
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-deployment-autoscaling
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
