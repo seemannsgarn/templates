@@ -1,0 +1,15 @@
+apiVersion: v2
+name: app-helmChart
+description: my chart for kuber app
+type: application
+version: 0.1.0        # this is the helm chart version
+appVersion: "1.2.3"   # this is the version of the app being deployed
+keywords:
+  - apache
+  - http
+  - https
+  - mustafaevsl
+
+maintainers:
+  - name: Darth Vader
+    email: deathstar@imperial.force

@@ -1,0 +1,5 @@
+# default values for helm chart
+container:
+  image: mustafaevsl/k8s-php-test:latest
+
+replicaCount: 1 

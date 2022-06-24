@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: death-star-deploy
+  labels:
+    app: deathStar
+    env: prod
+    owner: DarthVader
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: deathStar
+  template:
+    metadata:
+      labels:
+        app: deathStar
+    spec:
+      containers:
+        - name: death-star
+          image: mustafaevsl/k8s-php-test:latest
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            tcpSocket:
+              port: 81              # должен быть порт 80, 81 указан для проверки
+            initialDelaySeconds: 25  # defaults to 0 seconds. Minimum value is 0.
+            periodSeconds: 5        # default to 10 sec. Min value is 1.
+            timeoutSeconds: 1       # default to 10 sec. Min value is 1.
+            successThreshold: 1     # default to 1. Must ve 1 for liveness and startup Probes. Min value is 1.
+            failureThreshold: 3     # default to 3. Min value is 1.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-nodeport-death-star
+spec:
+  selector:
+    app: deathStar
+  ports:
+    - protocol:
+      port: 8080
+      targetPort: 80
+      nodePort: 30080 # range 30000-32767
+  type: NodePort
