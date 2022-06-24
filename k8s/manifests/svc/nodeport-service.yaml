@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: k8s-application
+    env: prod
+    owner: DarthVader
+spec:
+  replicas: 3
+  selector: 
+    matchLabels: 
+      project: deathStar
+  template:
+    metadata:
+      labels:
+        project: deathStar
+    spec:
+      containers:
+        - name: death-star
+          image: mustafaevsl/k8s-php-test:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-service-nodeport
+spec:
+  # externalTrafficPolicy: local # трафик роутится 50 на 50 по нодам
+  # sessionAffinity: ClientIP # кеширует адрес, чтобы в дальнейшем попадать только на определенный под
+  selector:
+    project: deathStar
+  ports:
+    - protocol:
+      port: 8080
+      targetPort: 80
+      nodePort: 30080 # range 30000-32767
+  type: NodePort

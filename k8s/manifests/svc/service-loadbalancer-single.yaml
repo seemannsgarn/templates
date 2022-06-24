@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deploy
+  labels:
+    app: k8s-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: deathstar
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: deathstar    # service will look for thos PODS labels
+    spec:
+      containers:
+        - name: death-start-web
+          image: mustafaevsl/k8s-php-test:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-single-pod-service
+  labels:
+    env: prod
+    owner: DarthVader
+spec:
+  selector:
+    project: deathstar # selecting pods with those labels
+  ports:
+    - name: app-listener
+      protocol: TCP
+      port: 80       # port in load balancer
+      targetPort: 80 # port on pods
+  type: LoadBalancer
